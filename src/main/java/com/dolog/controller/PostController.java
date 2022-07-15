@@ -41,6 +41,7 @@ public class PostController {
     // BindingResult result를 제거 해줘야 controller adive로 연결가능
     @PostMapping("/posts")
     public Map<String, String> post(@RequestBody @Valid PostCreate params) {
+        // db.save(params)
         return Map.of();
     }
 }
