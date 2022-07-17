@@ -40,7 +40,7 @@ class PostControllerTest {
     }
 
     @Test
-    @DisplayName("/posts 요청시 Hello World를 출력한다.")
+    @DisplayName("/posts")
     void test() throws Exception {
         //given
         PostCreate request = PostCreate.builder()
@@ -59,13 +59,13 @@ class PostControllerTest {
                 )
                 // application/json
                 .andExpect(status().isOk())
-                .andExpect(content().string("{}"))
+                .andExpect(content().string(""))
                 // .andDo(MockMvcResultHandlers.print())로 테스트 브리핑을 얻을 수 있다.
                 .andDo(print());
     }
 
     @Test
-    @DisplayName("/posts 요청시 Hello World를 출력한다.")
+    @DisplayName("/posts 요청시 title 값은 필수다.")
     void noTitleTest() throws Exception {
         //given
         PostCreate request = PostCreate.builder()
