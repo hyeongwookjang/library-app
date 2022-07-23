@@ -1,6 +1,7 @@
 package com.dolog.controller;
 
 
+import com.dolog.domain.Post;
 import com.dolog.request.PostCreate;
 import com.dolog.response.PostResponse;
 import com.dolog.service.PostService;
@@ -9,6 +10,7 @@ import lombok.extern.slf4j.Slf4j;
 import org.springframework.web.bind.annotation.*;
 
 import javax.validation.Valid;
+import java.util.List;
 /**
  Http Method (https://developer.mozilla.org/ko/docs/Web/HTTP/Methods)
  Status Code (https://developer.mozilla.org/en-US/docs/Web/HTTP/Status)
@@ -48,21 +50,22 @@ public class PostController {
     }
 
     @GetMapping("/posts/{postId}")
-    public PostResponse get(@PathVariable(name = "postId") Long id) {
-
-        // Request(DTO) 클래스
-        // Response 클래스
-        PostResponse response = postService.get(id);
-        return response;
+    public PostResponse get(@PathVariable(name = "postId") Long postId) {
+        return postService.get(postId);
     }
+
+    @GetMapping("/posts")
+    public List<Post> getList() {
+        return postService.getList();
+    }
+
+
 
     /**
      * /posts -> 글 전체 조회(검색 + 페이징)
      * /posts/{postId} -> 글 한개만 조회
      * */
 }
-
-
 
 
 /**  Case1. 저장한 데이터 Entity -> response로 응답하기

@@ -14,7 +14,7 @@ public class PostResponse {
     @Builder
     public PostResponse(Long id, String title, String content) {
         this.id = id;
-        this.title = title.substring(0, 5);
+        this.title = title.substring(0, 1);
         this.content = content;
     }
 
