@@ -4,16 +4,25 @@ import com.dolog.domain.Post;
 import com.dolog.repository.PostRepository;
 import com.dolog.request.PostCreate;
 import com.dolog.response.PostResponse;
-import org.junit.jupiter.api.Assertions;
-import org.junit.jupiter.api.DisplayName;
-import org.junit.jupiter.api.Test;
+import org.assertj.core.internal.Lists;
+import org.junit.jupiter.api.*;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
 
+import java.util.List;
+
 import static org.junit.jupiter.api.Assertions.*;
+
+
+
 
 @SpringBootTest
 class PostServiceTest {
+
+    @BeforeEach
+    void clean() {
+        postRepository.deleteAll();
+    }
 
     @Autowired
     private PostService postService;
@@ -59,4 +68,29 @@ class PostServiceTest {
         assertEquals("foo", response.getTitle());
         assertEquals("bar", response.getContent());
     }
+
+
+    @Test
+    @DisplayName("글 여러개 조회")
+    void getMultiTest() {
+        //given
+        Post requestPost1;
+        postRepository.saveAll(List.of(
+                Post.builder()
+                        .title("foo")
+                        .content("bar")
+                        .build(),
+                Post.builder()
+                        .title("foo1")
+                        .content("bar1")
+                        .build()
+        ));
+
+        //when
+        List<PostResponse> posts = postService.getList();
+
+        //then
+        assertNotNull(posts);
+        assertEquals(2L, posts.size());
     }
+}

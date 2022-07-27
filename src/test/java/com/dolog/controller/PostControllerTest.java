@@ -4,6 +4,7 @@ import com.dolog.domain.Post;
 import com.dolog.repository.PostRepository;
 import com.dolog.request.PostCreate;
 import com.fasterxml.jackson.databind.ObjectMapper;
+import org.hamcrest.Matchers;
 import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.DisplayName;
@@ -16,6 +17,7 @@ import org.springframework.http.MediaType;
 import org.springframework.test.web.servlet.MockMvc;
 
 import static org.junit.jupiter.api.Assertions.assertEquals;
+import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.get;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.post;
 import static org.springframework.test.web.servlet.result.MockMvcResultHandlers.print;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.*;
@@ -126,15 +128,54 @@ class PostControllerTest {
        postRepository.save(post);
 
         //when
-        mockMvc.perform(post("/posts/{postId}", post.getId())
+        mockMvc.perform(get("/posts/{postId}", post.getId())
                         .contentType(MediaType.APPLICATION_JSON))
                 .andExpect(status().isOk())
                 .andExpect(jsonPath("$.id").value(post.getId()))
-                .andExpect(jsonPath("$.title").value("1234567890"))
+                .andExpect(jsonPath("$.title").value("123456789012345"))
                 .andExpect(jsonPath("$.content").value("bar"))
                 .andDo(print());
                 // application/json
                 // .andDo(MockMvcResultHandlers.print())로 테스트 브리핑을 얻을 수 있다.
+
+    }
+
+
+    @Test
+    @DisplayName("글 여러개 조회")
+    void test5() throws Exception {
+        //given
+        Post post1 = Post.builder()
+                .title("title_1")
+                .content("content_1")
+                .build();
+        postRepository.save(post1);
+
+
+        Post post2 = Post.builder()
+                .title("title_2")
+                .content("content_2")
+                .build();
+        postRepository.save(post2);
+
+
+        //when
+        mockMvc.perform(get("/posts")
+                        .contentType(MediaType.APPLICATION_JSON))
+                .andExpect(status().isOk())
+                .andExpect(jsonPath("$.length()", Matchers.is(2)))
+                .andExpect(jsonPath("$[0].id").value(post1.getId()))
+                .andExpect(jsonPath("$[0].title").value("title_1"))
+                .andExpect(jsonPath("$[0].content").value("content_1"))
+                .andExpect(jsonPath("$[1].id").value(post2.getId()))
+                .andExpect(jsonPath("$[1].title").value("title_2"))
+                .andExpect(jsonPath("$[1].content").value("content_2"))
+                /**
+                 * [{id: .., title:,,,,}, {id:.., title:...}]
+                 * */
+                .andDo(print());
+        // application/json
+        // .andDo(MockMvcResultHandlers.print())로 테스트 브리핑을 얻을 수 있다.
 
     }
 }

@@ -55,11 +55,9 @@ public class PostController {
     }
 
     @GetMapping("/posts")
-    public List<Post> getList() {
+    public List<PostResponse> getList() {
         return postService.getList();
     }
-
-
 
     /**
      * /posts -> 글 전체 조회(검색 + 페이징)
