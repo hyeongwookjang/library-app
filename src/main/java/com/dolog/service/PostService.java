@@ -49,11 +49,11 @@ public class PostService {
 
 
 
-     public List<PostResponse> getList() {
-     return postRepository.findAll().stream()
-             .map(post -> new PostResponse(post))
-            .collect(Collectors.toList());
-     }
+//     public List<PostResponse> getList() {
+//     return postRepository.findAll().stream()
+//             .map(post -> new PostResponse(post))
+//            .collect(Collectors.toList());
+//     }
 
    /** 위와 같이 간결하게 변환
     public List<PostResponse> getList() {
